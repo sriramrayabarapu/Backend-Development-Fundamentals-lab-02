@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: backend-development-lab-2
+    runtime: node
+    plan: free
+    buildCommand: npm install && npm rebuild sqlite3 --build-from-source && npm run seed
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: 20

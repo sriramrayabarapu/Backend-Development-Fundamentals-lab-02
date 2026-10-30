@@ -1,14 +1,22 @@
 {
   "name": "backend-development-lab-2",
   "version": "1.0.0",
-  "description": "",
+  "description": "Book Management REST API built with Node.js, Express, and SQLite",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon server.js",
+    "seed": "node seed.js",
+    "test": "node test.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "nodejs",
+    "express",
+    "sqlite",
+    "rest-api",
+    "crud"
+  ],
+  "author": "RAYABARAPU SRIRAM",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {

@@ -1,4 +1,3 @@
-
 const connectToDatabase = require("./database");
 
 async function seedDatabase() {
@@ -31,7 +30,11 @@ async function seedDatabase() {
     }
 }
 
-seedDatabase().catch(error => {
-    console.error(error);
-    process.exitCode = 1;
-});
+if (require.main === module) {
+    seedDatabase().catch((error) => {
+        console.error("Failed to seed database:", error);
+        process.exitCode = 1;
+    });
+}
+
+module.exports = seedDatabase;
