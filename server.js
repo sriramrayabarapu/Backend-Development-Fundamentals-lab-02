@@ -7,17 +7,32 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
 let db;
-const databaseReady = connectToDatabase().then((connection) => {
-    db = connection;
-});
+let databaseReady;
+
+function getDatabase() {
+    if (!databaseReady) {
+        databaseReady = connectToDatabase()
+            .then((connection) => {
+                db = connection;
+            })
+            .catch((error) => {
+                databaseReady = undefined;
+                throw error;
+            });
+    }
+
+    return databaseReady;
+}
 
 app.use(async (req, res, next) => {
     try {
-        await databaseReady;
-        next();
+        await getDatabase();
     } catch (error) {
-        next(error);
+        console.error("Unable to initialize database:", error);
+        return res.status(503).json({ error: "Database unavailable" });
     }
+
+    next();
 });
 
 // 1. GET all books
@@ -152,7 +167,7 @@ app.delete("/books/:bookId/", async (req, res) => {
 });
 
 if (require.main === module) {
-    databaseReady
+    getDatabase()
         .then(() => {
             app.listen(PORT, () => {
                 console.log(`Server running at http://localhost:${PORT}`);

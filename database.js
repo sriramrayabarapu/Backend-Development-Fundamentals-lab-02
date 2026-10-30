@@ -1,9 +1,10 @@
 
-const sqlite3 = require("sqlite3");
-const { open } = require("sqlite");
 const path = require("path");
 
 async function connectToDatabase() {
+    const sqlite3 = require("sqlite3");
+    const { open } = require("sqlite");
+
     const db = await open({
         filename: process.env.DB_PATH || (
             process.env.VERCEL
