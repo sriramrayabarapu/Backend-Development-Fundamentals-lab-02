@@ -5,7 +5,11 @@ const path = require("path");
 
 async function connectToDatabase() {
     const db = await open({
-        filename: path.join(__dirname, "books.db"),
+        filename: process.env.DB_PATH || (
+            process.env.VERCEL
+                ? path.join("/tmp", "books.db")
+                : path.join(__dirname, "books.db")
+        ),
         driver: sqlite3.Database
     });
 

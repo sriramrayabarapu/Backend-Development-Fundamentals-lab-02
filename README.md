@@ -96,6 +96,17 @@ http://localhost:3000
 
 Keep the terminal running while testing the API.
 
+## Deploy to Vercel
+
+Import this GitHub repository into Vercel and deploy it with the project root as the
+root directory. Vercel detects the exported Express application in `server.js`
+automatically.
+
+On Vercel, SQLite is stored under `/tmp`. This allows the API to run without writing
+to the read-only deployment directory, but `/tmp` is temporary: data can reset or
+differ between function instances. Use a managed database for persistent production
+data.
+
 ## CRUD API Endpoints
 
 | HTTP Method | Endpoint | Description | Expected Status |

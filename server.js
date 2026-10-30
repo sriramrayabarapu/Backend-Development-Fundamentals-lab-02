@@ -7,6 +7,18 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
 let db;
+const databaseReady = connectToDatabase().then((connection) => {
+    db = connection;
+});
+
+app.use(async (req, res, next) => {
+    try {
+        await databaseReady;
+        next();
+    } catch (error) {
+        next(error);
+    }
+});
 
 // 1. GET all books
 app.get("/books/", async (req, res) => {
@@ -139,17 +151,17 @@ app.delete("/books/:bookId/", async (req, res) => {
     }
 });
 
-async function startServer() {
-    try {
-        db = await connectToDatabase();
-
-        app.listen(PORT, () => {
-            console.log(`Server running at http://localhost:${PORT}`);
+if (require.main === module) {
+    databaseReady
+        .then(() => {
+            app.listen(PORT, () => {
+                console.log(`Server running at http://localhost:${PORT}`);
+            });
+        })
+        .catch((error) => {
+            console.error("Unable to start server:", error.message);
+            process.exitCode = 1;
         });
-    } catch (error) {
-        console.error("Unable to start server:", error.message);
-        process.exit(1);
-    }
 }
 
-startServer();
+module.exports = app;
